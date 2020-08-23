@@ -21,29 +21,34 @@ const getAllUser = (req, res) => {
 };
 
 
-// Find user by mobile number 
+// Find user by mobile number
 const getUserByMobileNumber = (req, res) => {
-    const validation = Joi.object(Validator.mobileValidation);
-    const { error, value } = validation.validate(req.params, Validator.options);
+  const validation = Joi.object(Validator.mobileValidation);
+  const { error, value } = validation.validate(req.params, Validator.options);
 
-    let LastEleven = value.mobileNumber.substring(value.mobileNumber.length - 11);
-    //console.log('LastEleven = ', LastEleven);
-    if (error) res.json({ message: "Validation Error" });
-    else {
-        User.findOne({ mobileNumber: LastEleven })
-          .then(result => {
-            return res.status(200).json({
-              message: "User Profile.",
-              Profile: result,
-            });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              message: "Error, Please try again.",
-              error: err.message
-            });
-          });
-    }
+  let LastEleven = value.mobileNumber.substring(value.mobileNumber.length - 11);
+  //console.log('LastEleven = ', LastEleven);
+  if (error) res.json({ message: "Validation Error" });
+  else {
+    User.findOne({ mobileNumber: LastEleven })
+        .then((result) => {
+            if (result) {
+              return res.status(200).json({
+                message: "User Profile.",
+                Profile: result,
+              });
+            }
+            return res.status(202).json({
+              message: "Contact not found!"
+            }); 
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "Error, Please try again.",
+          error: err.message
+        });
+      });
+  }
 };
 
 
