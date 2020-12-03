@@ -1,5 +1,4 @@
-# Technical_Test_CDP
-Technology used: 
+# Technology used: 
 
   . JavaScript (Node.js)
   
